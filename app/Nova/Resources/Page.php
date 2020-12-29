@@ -77,6 +77,9 @@ class Page extends Resource
     // phpcs:ignore SlevomatCodingStandard.Functions.UnusedParameter
     public function fields(Request $request)
     {
+        $user = $request->user();
+        $groupRules = $user->can('admin', Page::class) ? 'nullable' : 'required';
+
         return [
             ID::make()->sortable(),
 
@@ -112,6 +115,12 @@ class Page extends Resource
             // Add multi selects
             BelongsTo::make('Laatst bewerkt door', 'author', User::class)
                 ->onlyOnDetail(),
+
+            BelongsTo::make('Eigenaar', 'role', Role::class)
+                ->help('Groep of commissie die deze pagina beheert')
+                ->rules($groupRules)
+                ->hideFromIndex()
+                ->nullable(),
 
             // Show timestamps
             DateTime::make('Aangemaakt op', 'created_at')->onlyOnDetail(),
