@@ -99,6 +99,15 @@ class Page extends SluggableModel implements AttachableInterface
     }
 
     /**
+     * Returns the owning group, if present
+     * @return BelongsTo
+     */
+    public function owner(): Relation
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    /**
      * Converts contents to HTML
      * @return string|null
      */
