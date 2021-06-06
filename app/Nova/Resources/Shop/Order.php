@@ -40,14 +40,19 @@ class Order extends Resource
     public static $group = 'Shop';
 
     /**
+     * Indicates if the resource should be globally searchable.
+     *
+     * @var bool
+     */
+    public static $globallySearchable = false;
+
+    /**
      * The columns that should be searched.
      *
      * @var array
      */
     public static $search = [
         'id',
-        'name',
-        'slug',
     ];
 
     /**
