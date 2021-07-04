@@ -39,5 +39,5 @@ Route::stripeWebhooks('payments/stripe/handle');
 Route::post('/bots/telegram', [TelegramBotController::class, 'handle'])->name('bots.telegram');
 
 // Register Mollie webhook URL
-Route::post('/mollie/hooks/activities', [MollieController::class, 'activity'])->name('webhooks.shop');
+Route::post('/mollie/hooks/activities', [MollieController::class, 'activity'])->name('webhooks.activities');
 Route::post('/mollie/hooks/shop', [MollieController::class, 'shop'])->name('webhooks.shop');

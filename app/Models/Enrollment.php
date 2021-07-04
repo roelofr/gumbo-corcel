@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Contracts\Payments\PayableModel;
 use App\Models\States\Enrollment\Cancelled as CancelledState;
 use App\Models\States\Enrollment\Confirmed as ConfirmedState;
 use App\Models\States\Enrollment\Created as CreatedState;
@@ -11,10 +12,14 @@ use App\Models\States\Enrollment\Paid as PaidState;
 use App\Models\States\Enrollment\Refunded as RefundedState;
 use App\Models\States\Enrollment\Seeded as SeededState;
 use App\Models\States\Enrollment\State as EnrollmentState;
+use App\Models\Traits\IsPayable;
+use App\Services\Payments\Order;
+use App\Services\Payments\OrderLine;
 use AustinHeap\Database\Encryption\Traits\HasEncryptedAttributes;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\URL;
 use Spatie\ModelStates\HasStates;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -49,10 +54,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * @property-read null|array<scalar> $form_data The form data to supply to the form builder
  * @property-read null|bool $is_form_exportable True if the form can be exported
  */
-class Enrollment extends UuidModel
+class Enrollment extends UuidModel implements PayableModel
 {
     use HasEncryptedAttributes;
     use HasStates;
+    use IsPayable;
     use SoftDeletes;
 
     public const USER_TYPE_MEMBER = 'member';
@@ -255,6 +261,59 @@ class Enrollment extends UuidModel
         }
 
         return Arr::get($this->data, 'form.medical', false) !== true;
+    }
+
+    /**
+     * Returns a Mollie order from this model.
+     */
+    public function toMollieOrder(): Order
+    {
+        $order = Order::make($this->total_price, "inschrijving-{$this->id}");
+
+        $address = $this->getPaymentAddressForUser($this->user);
+        $order
+            ->billingAddress($address)
+            ->shippingAddress($address);
+
+        $order->addLine(
+            OrderLine::make(
+                $this->activity->name,
+                1,
+                $this->price,
+            )->productUrl(URL::route('activity.show', $this->activity)),
+        );
+
+        $order->addLine(
+            OrderLine::make(
+                'Transactiekosten',
+                1,
+                (int) ($this->total_price - $this->price),
+                'surcharge',
+            ),
+        );
+
+        $order
+            ->redirectUrl(URL::route('enroll.pay-return', $this));
+
+        $isLocal = in_array(parse_url(URL::to('/'), PHP_URL_HOST), [
+            'localhost',
+            '127.0.0.1',
+            '[::1]',
+        ], true);
+
+        if (! $isLocal) {
+            $order
+                ->webhookUrl(URL::route('api.webhooks.activities'));
+        }
+
+        $order
+            ->method('ideal')
+            ->locale('nl_NL');
+
+        $order
+            ->expiresAt($this->expires_at->addDays(5));
+
+        return $order;
     }
 
     /**
