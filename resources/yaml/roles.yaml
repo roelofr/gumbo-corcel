@@ -113,3 +113,7 @@ dc:
 
     # Allow becoming other users
     - impersonate
+
+lucie:
+  title: Lustrum Commissie
+  extends: ic
