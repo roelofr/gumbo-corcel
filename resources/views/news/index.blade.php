@@ -18,12 +18,13 @@
     $postIso = $postTimestamp->toIso8601String();
     $postDate = $postTimestamp->isoFormat('DD MMM \'YY');
     $headline = $item->headline ?? Str::words(strip_tags($item->html), 10);
+    $coverImage = image_asset($item->cover_image)->width(384)->height(256);
     @endphp
     <article class="card-grid__item">
         <div class="card">
             <div class="card__figure" role="presentation">
             @if ($item->image->exists())
-                <img class="card__figure-image" src="{{ $item->image->url('cover') }}" srcset="{{ $item->image->url('cover') }} 384w,{{ $item->image->url('cover-2x') }} 768w">
+                <img class="card__figure-image" src="{{ $coverImage }}" srcset="{{ $coverImage }} 384w,{{ (clone $coverImage)->dpi(2) }} 768w">
             @else
                 <div class="card__figure-wrapper">
                     <img src="{{ mix('images/logo-text-green.svg') }}" alt="Gumbo Millennium" class="h-16 mx-auto block dark:hidden">

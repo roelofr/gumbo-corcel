@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 /**
  * A news article.
  *
- * @property-read AttachmentInterface $image
  * @property int $id
  * @property \Illuminate\Support\Date $created_at
  * @property \Illuminate\Support\Date $updated_at
@@ -27,11 +26,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
  * @property null|string $headline
  * @property null|array $contents
  * @property null|int $author_id
- * @property null|string $image_file_name image name
- * @property null|int $image_file_size image size (in bytes)
- * @property null|string $image_content_type image content type
- * @property null|string $image_updated_at image update timestamp
- * @property null|array $image_variants image variants (json)
+ * @property null|string $cover_image
  * @property-read null|User $author
  * @property-read null|string $html
  */

@@ -50,6 +50,9 @@ jobs:
       matrix:
         php:
           - '7.4'
+        include:
+          - php: '7.4'
+            main: true
 
     services:
       database:
@@ -134,7 +137,19 @@ jobs:
           php artisan optimize:clear -vv
 
       - name: Run unit tests
-        run: vendor/bin/phpunit --coverage-clover coverage-clover.xml
+        run: |
+          vendor/bin/phpunit \
+            --coverage-clover coverage-clover.xml
+
+      - name: Report coverage to Pull Request
+        uses: slavcodev/coverage-monitor-action@v1
+        if: ${{ github.event_name == 'pull_request' && matrix.main == true }}
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          clover_file: coverage-clover.xml
+          threshold_alert: 15
+          threshold_warning: 60
+          comment: false
 
       - name: Report test results to CodeClimate
         if: matrix.php == '7.4'

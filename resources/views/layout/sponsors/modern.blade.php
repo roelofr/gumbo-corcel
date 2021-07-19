@@ -1,5 +1,6 @@
 @php
 $sponsorClass = Str::slug("sponsor--brand-{$sponsor->slug}");
+$backdrop = image_asset($sponsor->background_image)->height(1920)->with(960)->fit('crop');
 $logo = $sponsorService->toSvg($sponsor, [
     'class' => 'sponsor__card-logo-img',
     'title' => $sponsor->name,
@@ -9,9 +10,10 @@ $logo = $sponsorService->toSvg($sponsor, [
 {{-- Style for the sponsor --}}
 <style nonce="{{ csp_nonce() }}">
 .sponsor--backdrop-brand {
-    background-image: url('{{ $sponsor->backdrop->url('banner') }}');
+    background-image: url('{{ $image }}');
 }
 </style>
+
 {{-- Actual sponsor --}}
 <div class="sponsor sponsor--backdrop sponsor--backdrop-brand">
     <div class="container sponsor__container sponsor__container--modern">

@@ -29,16 +29,12 @@ use Illuminate\Support\Facades\Storage;
  * @property null|\Illuminate\Support\Date $ends_at
  * @property null|int $has_page
  * @property int $view_count Number of showings
- * @property null|string $backdrop_file_name backdrop name
- * @property null|int $backdrop_file_size backdrop size (in bytes)
- * @property null|string $backdrop_content_type backdrop content type
- * @property null|string $backdrop_updated_at backdrop update timestamp
- * @property null|mixed $backdrop_variants backdrop variants (json)
  * @property null|string $caption
  * @property null|string $logo_gray
  * @property null|string $logo_color
  * @property null|string $contents_title
  * @property null|mixed $contents
+ * @property null|string $background_image
  * @property-read \Illuminate\Database\Eloquent\Collection<SponsorClick> $clicks
  * @property-read mixed $click_count
  * @property-read null|string $content_html
@@ -143,8 +139,7 @@ class Sponsor extends SluggableModel implements AttachableInterface
      */
     public function getIsClassicAttribute(): bool
     {
-        return ! $this->backdrop->exists()
-            || empty($this->caption);
+        return empty($this->background_image) || empty($this->caption);
     }
 
     /**

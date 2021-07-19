@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Fluent\Image;
 use App\Helpers\Str;
 
 if (! function_exists('mix_file')) {
@@ -35,5 +36,12 @@ if (! function_exists('mix_file')) {
 
         // Get contents
         return file_get_contents($fullPath, false, null, 0, 1024 * 1024);
+    }
+}
+
+if (! function_exists('image_asset')) {
+    function image_asset(?string $file): Image
+    {
+        return Image::make($file);
     }
 }

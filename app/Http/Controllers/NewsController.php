@@ -98,7 +98,10 @@ class NewsController extends Controller
         SEOTools::setDescription($description);
         SEOTools::setCanonical($url);
         SEOTools::addImages([
-            $item->image->url('social'),
+            // Scale image to proper size for OpenGraph
+            image_asset($item->cover_image)
+                ->width(1200)
+                ->getUrl(),
         ]);
 
         // Set Open Graph

@@ -24,7 +24,7 @@ services:
   # Application and webserver
   laravel:
     << : *laravel-base
-    image: docker.pkg.github.com/gumbo-millennium/website/laravel
+    image: ghcr.io/gumbo-millennium/website/laravel
     build:
       context: .docker/laravel
       target: laravel
@@ -34,14 +34,14 @@ services:
   # Application
   horizon:
     << : *laravel-base
-    image: docker.pkg.github.com/gumbo-millennium/website/horizon
+    image: ghcr.io/gumbo-millennium/website/horizon
     build:
       context: .docker/laravel
       target: horizon
 
   # mysql database
   database:
-    image: docker.pkg.github.com/gumbo-millennium/website/database
+    image: ghcr.io/gumbo-millennium/website/database
     build:
       context: .docker/database
     volumes:
@@ -67,7 +67,7 @@ services:
 
   # PhpMyAdmin
   pma:
-    image: docker.pkg.github.com/gumbo-millennium/website/phpmyadmin
+    image: ghcr.io/gumbo-millennium/website/phpmyadmin
     build:
       context: .docker/phpmyadmin
     networks:

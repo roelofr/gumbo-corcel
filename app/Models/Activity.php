@@ -37,6 +37,7 @@ use Whitecube\NovaFlexibleContent\Concerns\HasFlexible;
  * @property string $name
  * @property string $slug
  * @property null|string $tagline
+ * @property null|string $poster
  * @property null|array $description
  * @property null|string $statement
  * @property null|string $location

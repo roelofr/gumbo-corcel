@@ -37,6 +37,7 @@
         "laravelium/sitemap": "^6.0",
         "laulamanapps/izettle-api": "dev-develop",
         "league/commonmark": "^1.5",
+        "league/glide-laravel": "^1.0",
         "mischiefcollective/colorjizz": "^1.0",
         "mollie/laravel-mollie": "^2.14",
         "phpoffice/phpspreadsheet": "^1.11",
