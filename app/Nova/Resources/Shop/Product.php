@@ -93,7 +93,7 @@ class Product extends Resource
             HasMany::make(__('Variants'), 'variants', ProductVariant::class),
 
             // Add support for multiple images for the product
-            HasMany::make(__('Images'), 'images', ProductImage::class)
+            HasMany::make(__('Images'), 'images', ProductImage::class),
         ];
     }
 }
