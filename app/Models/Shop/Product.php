@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property bool $visible
  * @property bool $advertise_on_home
  * @property array $meta
+ * @property array $images A list of strings for image paths.
  * @property-read string $valid_image_url
  * @property-read null|ProductVariant $default_variant
  * @property-read null|\App\Models\Shop\Category $category
@@ -43,6 +44,7 @@ class Product extends Model
         'advertise_on_home' => 'bool',
         'vat_rate' => 'int',
         'meta' => 'json',
+        'images' => 'array',
     ];
 
     protected $attributes = [

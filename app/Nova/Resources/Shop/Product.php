@@ -91,6 +91,9 @@ class Product extends Resource
                 ->searchable(),
 
             HasMany::make(__('Variants'), 'variants', ProductVariant::class),
+
+            // Add support for multiple images for the product
+            HasMany::make(__('Images'), 'images', ProductImage::class)
         ];
     }
 }
